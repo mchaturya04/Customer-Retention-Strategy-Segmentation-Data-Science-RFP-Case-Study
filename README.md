@@ -1,5 +1,5 @@
 # Customer Retention Strategy & Segmentation  
-## Data Science RFP Case Study – Acme Innovations
+## Data Science RFP Case Study
 
 ##  Project Overview
 This project was developed as part of a Data Science RFP (Request for Proposal) competition, simulating a real-world consulting engagement for Acme Innovations — a legacy consumer products company facing declining customer retention.
