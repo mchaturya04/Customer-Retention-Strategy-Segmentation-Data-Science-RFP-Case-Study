@@ -1,0 +1,30 @@
+---
+title: "RFP Apriori"
+author: "Chaturya"
+date: "2025-05-14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# install.packages('arules')
+library(arules)
+dataset = read.csv('Acme_Innovations_market_basket_sample.csv', header = FALSE)
+dataset = read.transactions('Acme_Innovations_market_basket_sample.csv', sep = ',', rm.duplicates = TRUE)
+summary(dataset)
+itemFrequencyPlot(dataset, topN = 10)
+```
+
+###Training Apriori on the dataset
+```{r}
+rules = apriori(data = dataset, parameter = list(support = 0.04, confidence = 0.2))
+```
+
+### Visualising the results
+```{r}
+inspect(sort(rules, by = 'lift')[1:10])
+```
+
