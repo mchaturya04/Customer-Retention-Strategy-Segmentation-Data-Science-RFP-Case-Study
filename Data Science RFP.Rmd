@@ -1,0 +1,94 @@
+---
+title: "Data Science RFP"
+author: "Chaturya"
+date: "2025-05-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+###Load the dataset
+```{r}
+ndata <- read.csv("customer_data.csv")
+print(ndata)
+```
+
+###Structure of the dataset
+```{r}
+str(ndata)
+```
+
+###Summary of the dataset
+```{r}
+summary(ndata)
+```
+
+
+###Check for Missing Values
+```{r}
+###Check for missing values in the dataset
+missing_values <- sapply(ndata, function(x) sum(is.na(x)))
+print(missing_values)
+```
+
+
+### Data Exploration
+```{r}
+X <- ndata[, c(2,3, 4, 5)]
+hist(X[, 1]) # Histogram for age distribution
+hist(X[, 2]) # Histogram for salary distribution
+hist(X[, 3]) # Histogram for spending score distribution
+hist(X[, 4]) # Histogram for time as customer distribution
+```
+###Scaling
+```{r}
+X_scaled <- as.data.frame(scale(X))
+summary(X_scaled)
+```
+
+
+```{r}
+# Using the elbow method to find the optimal number of clusters
+set.seed(6)
+wcss = vector()
+for (i in 1:10) wcss[i] = sum(kmeans(X_scaled, i)$withinss)
+plot(x = 1:10,
+     y = wcss,
+     type = 'b',
+     main = paste('The Elbow Method'),
+     xlab = 'Number of clusters',
+     ylab = 'WCSS')
+# While the elbow method is a common technique to choose the number of clusters(K),
+# the elbow may not always be clearly defined. In some cases, the WCSS curve may 
+# have a more gradual bend, requiring some judgement in selecting the most 
+# appropriate K value.
+```
+
+```{r}
+# Fitting K-Means to the dataset
+set.seed(29) # Set random seed again for reproducibility
+kmeans = kmeans(x = X_scaled,
+                centers = 4,
+                iter.max = 300,
+                nstart = 10)# Perform K-Means with 5 clusters
+```
+
+```{r}
+# Visualising the clusters
+library(cluster)
+clusplot(x = X_scaled,
+         clus = kmeans$cluster,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels = 0,
+         plotchar = FALSE,
+         span = TRUE,
+         main = paste('Clusters of customers'),
+         xlab = 'salary',
+         ylab = 'Spending Score')
+```
+
